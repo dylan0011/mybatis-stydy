@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
  * Desc:
  */
 public abstract class TypeReference<T> {
-    private final Type rawType;
+    private final Type rawType; //just like this:List list = new ArrayList<>(); list is a rawType
 
     protected TypeReference() {
         rawType = getSuperclassTypeParameter(getClass());

@@ -1,6 +1,7 @@
 package cn.dylan.mapping;
 
 import cn.dylan.transaction.TransactionFactory;
+import lombok.Getter;
 
 import javax.sql.DataSource;
 
@@ -11,8 +12,11 @@ import javax.sql.DataSource;
  */
 public final class Environment {
 
+    @Getter
     private final String id;
+    @Getter
     private final TransactionFactory transactionFactory;
+    @Getter
     private final DataSource dataSource;
 
     public Environment(String id, TransactionFactory transactionFactory, DataSource dataSource) {
@@ -58,18 +62,6 @@ public final class Environment {
             return new Environment(this.id, this.transactionFactory, this.dataSource);
         }
 
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public TransactionFactory getTransactionFactory() {
-        return this.transactionFactory;
-    }
-
-    public DataSource getDataSource() {
-        return this.dataSource;
     }
 
 }

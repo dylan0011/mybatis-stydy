@@ -1,6 +1,8 @@
 package cn.dylan.annotations;
 
 import cn.dylan.type.JdbcType;
+import cn.dylan.type.TypeHandler;
+import cn.dylan.type.UnknownTypeHandler;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -23,5 +25,13 @@ public @interface Arg {
     Class<?> javaType() default void.class;
 
     JdbcType jdbcType() default JdbcType.UNDEFINED;
+
+    Class<? extends TypeHandler> typeHandler() default UnknownTypeHandler.class;
+
+    String select() default "";
+
+    String resultMap() default "";
+
+    String name() default "";
 
 }
