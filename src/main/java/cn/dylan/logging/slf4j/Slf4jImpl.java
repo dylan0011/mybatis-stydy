@@ -2,51 +2,70 @@ package cn.dylan.logging.slf4j;
 
 import cn.dylan.logging.Log;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.spi.LocationAwareLogger;
 
 /**
  * Created by yuhp@terminus.io on 2017/6/30.
  * Desc:
  */
-public class Slf4jImpl implements Log{
+public class Slf4jImpl implements Log {
 
-    private Logger logger;
+    private Log log;
 
-    public Slf4jImpl(Logger logger) {
-        this.logger = logger;
+
+    public Slf4jImpl(String clazz) {
+        Logger logger = LoggerFactory.getLogger(clazz);
+
+        if (logger instanceof LocationAwareLogger) {
+            try {
+                // check for slf4j >= 1.6 method signature
+                logger.getClass().getMethod("log", Marker.class, String.class, int.class, String.class, Object[].class, Throwable.class);
+                log = new Slf4jLocationAwareLoggerImpl((LocationAwareLogger) logger);
+                return;
+            } catch (SecurityException | NoSuchMethodException e) {
+                // fail-back to Slf4jLoggerImpl
+            }
+        }
+
+        // Logger is not LocationAwareLogger or slf4j version < 1.6
+        log = new Slf4jLoggerImpl(logger);
+
     }
 
     @Override
     public boolean isDebugEnabled() {
-        return logger.isDebugEnabled();
+        return log.isDebugEnabled();
     }
 
     @Override
     public boolean isTraceEnabled() {
-        return logger.isTraceEnabled();
+        return log.isTraceEnabled();
     }
 
     @Override
     public void error(String s, Throwable e) {
-        logger.error(s, e);
+        log.error(s, e);
     }
 
     @Override
     public void error(String s) {
-        logger.error(s);
+        log.error(s);
     }
 
     @Override
     public void debug(String s) {
-        logger.debug(s);
+        log.debug(s);
     }
 
     @Override
     public void trace(String s) {
-        logger.trace(s);
+        log.trace(s);
     }
 
     @Override
     public void warn(String s) {
-        logger.warn(s);
+        log.warn(s);
     }
 }
